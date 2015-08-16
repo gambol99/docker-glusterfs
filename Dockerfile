@@ -30,12 +30,12 @@ RUN wget http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.3/CentOS/glus
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 
 RUN yum --setopt=tsflags=nodocs -y install glusterfs glusterfs-server glusterfs-fuse glusterfs-geo-replication glusterfs-cli glusterfs-api && \
-    yum --setopt=tsflags=nodocs -y install attr iputils iproute && \
+    yum --setopt=tsflags=nodocs -y install attr iputils iproute nfs-common && \
     yum clean all
 
 VOLUME [ "/sys/fs/cgroup" ]
 
-EXPOSE 111 245 443 24007 2049 8080 6010 6011 6012 38465 38466 38468 38469 49152 49153 49154 49156 49157 49158 49159 49160 49161 49162
+EXPOSE 111 245 24007 24008 24009 2049 6010 6011 6012 38465 38466 38468 38469 49152 49153 49154 49156 49157 49158 49159 49160 49161 49162
 
 RUN systemctl disable nfs-server.service
 RUN systemctl enable rpcbind.service
