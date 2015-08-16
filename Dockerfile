@@ -11,7 +11,8 @@ ENV container docker
 RUN yum --setopt=tsflags=nodocs -y update && \
     yum --setopt=tsflags=nodocs -y install wget && \
     yum --setopt=tsflags=nodocs -y install nfs-utils && \
-    yum -y swap -- remove fakesystemd -- install systemd systemd-libs
+    yum -y swap -- remove fakesystemd -- install systemd systemd-libs && \
+    yum update -y systemd-container
 
 RUN yum -y update; yum clean all; \
   (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
