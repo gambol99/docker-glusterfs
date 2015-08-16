@@ -21,20 +21,23 @@ RUN yum -y update; yum clean all; \
   rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
   rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
   rm -f /lib/systemd/system/basic.target.wants/*;\
-  rm -f /lib/systemd/system/anaconda.target.wants/*;
+  rm -f /lib/systemd/system/anaconda.target.wants/*; \
+  rm -f /etc/sysconfig/network-scripts/ifcfg-ens3;
+
+ADD config/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
 
 RUN wget http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.3/CentOS/glusterfs-epel.repo -O /etc/yum.repos.d/glusterfs-epel.repo
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 
-RUN yum -y update && \
-    yum --setopt=tsflags=nodocs -y install glusterfs glusterfs-server glusterfs-fuse glusterfs-geo-replication glusterfs-cli glusterfs-api && \
-    yum --setopt=tsflags=nodocs -y install attr && \
-    yum clean all 
+RUN yum --setopt=tsflags=nodocs -y install glusterfs glusterfs-server glusterfs-fuse glusterfs-geo-replication glusterfs-cli glusterfs-api && \
+    yum --setopt=tsflags=nodocs -y install attr iputils iproute && \
+    yum clean all
 
 VOLUME [ "/sys/fs/cgroup" ]
 
 EXPOSE 111 245 443 24007 2049 8080 6010 6011 6012 38465 38466 38468 38469 49152 49153 49154 49156 49157 49158 49159 49160 49161 49162
 
+RUN systemctl disable nfs-server.service
 RUN systemctl enable rpcbind.service
 RUN systemctl enable glusterd.service
 

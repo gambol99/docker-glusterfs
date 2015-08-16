@@ -15,5 +15,4 @@ build:
 	sudo docker build -t ${AUTHOR}/${NAME} .
 
 test:
-	sleep 2
 	sudo docker run -ti --rm -e --net=host ${AUTHOR}/${NAME}
