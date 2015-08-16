@@ -8,6 +8,8 @@ FROM centos
 MAINTAINER Rohith <gambol99@gmail.com>
 
 ENV container docker
+ENV TERM linux
+
 RUN yum --setopt=tsflags=nodocs -y update && \
     yum --setopt=tsflags=nodocs -y install wget && \
     yum --setopt=tsflags=nodocs -y install nfs-utils && \
@@ -26,12 +28,13 @@ RUN yum -y update; yum clean all; \
   rm -f /etc/sysconfig/network-scripts/ifcfg-ens3;
 
 ADD config/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
+ADD config/rpcbind.service /usr/lib/systemd/system/rpcbind.service
 
 RUN wget http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.3/CentOS/glusterfs-epel.repo -O /etc/yum.repos.d/glusterfs-epel.repo
 RUN rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 
 RUN yum --setopt=tsflags=nodocs -y install glusterfs glusterfs-server glusterfs-fuse glusterfs-geo-replication glusterfs-cli glusterfs-api && \
-    yum --setopt=tsflags=nodocs -y install attr iputils iproute nfs-common && \
+    yum --setopt=tsflags=nodocs -y install attr iputils iproute && \
     yum clean all
 
 VOLUME [ "/sys/fs/cgroup" ]
